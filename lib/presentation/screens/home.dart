@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:image/image.dart' as img;
+import 'package:permission_handler/permission_handler.dart';
 import '../../application/image_text_service.dart';
 import '../../data/repositories/image_text_repository.dart';
 
@@ -20,6 +21,13 @@ class _ImageTextPageState extends State<ImageTextPage> {
     setState(() {
       _extractedText = imageText.text;
     });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    requestStoragePermission();
   }
 
   @override
@@ -45,5 +53,14 @@ class _ImageTextPageState extends State<ImageTextPage> {
         ),
       ),
     );
+  }
+
+  Future<void> requestStoragePermission() async {
+    var status = await Permission.storage.request();
+    if (status.isGranted) {
+      print("Permitido: ${status.isGranted}");
+    } else {
+       print("Opps: ${status}");
+    }
   }
 }
